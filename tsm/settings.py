@@ -85,6 +85,7 @@ DATABASES = {
 
 # AUTH USER MODEL
 
+# AUTH_USER_MODEL = 'core.User'
 AUTH_USER_MODEL = 'core.User'
 
 # Password validation
