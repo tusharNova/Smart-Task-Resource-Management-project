@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render , HttpResponse
 
-# Create your views here.
+from rest_framework import serializers
+
+def Home(request):
+    return HttpResponse("<h1>hey user</h1>")
