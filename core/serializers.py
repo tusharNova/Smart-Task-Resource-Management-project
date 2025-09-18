@@ -29,7 +29,7 @@ class TaskSerializer(serializers.ModelSerializer):
     assignee_id = serializers.PrimaryKeyRelatedField(
         write_only = True , queryset = User.objects.all() , source = 'assignee', required = False ,allow_null = True
     ) 
-
+    
     attachment = AttachmentSerializer(many = True , read_only = True)
     comment = CommentSerializer(many = True , read_only = True)
 
@@ -49,12 +49,12 @@ class ProjectSerializer(serializers.ModelSerializer):
     member_id = serializers.PrimaryKeyRelatedField(
         write_only = True , queryset = User.objects.all() , source = 'member', required = False ,allow_null = True
     )
-
-    tasks = Task(many = True , read_only = True)
+    
+    tasks = TaskSerializer(many = True , read_only = True)
 
     class Meta:
         model = Project
         fields = (
-            'id' , 'name' ,'descriptions' , 'owner' , 'owner_id' , 'member' , 'member_id' ,'task' ,  'created_at' , 'updated_at'
+            'id' , 'name' ,'descriptions' , 'owner' , 'owner_id' , 'member' , 'member_id' ,'tasks' ,  'created_at' , 'updated_at'
         )
         read_only_feilds = ('created_at' , 'updated_at' , 'owner' , 'members' , 'tasks')
