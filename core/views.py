@@ -5,12 +5,13 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter , OrderingFilter
 from django.shortcuts import get_list_or_404  
-
 from .models import User , Attachment , Comment , Task , Project
 
 from .serializers import UserBriefSerializer  ,CommentSerializer , TaskSerializer , ProjectSerializer ,AttachmentSerializer
 from .permissions import IsOwnerOrReadOnly
 from django.contrib.auth import get_user_model
+
+
 
 def Home(request):
     return HttpResponse("<h1>hey user</h1>")
@@ -37,7 +38,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
         user = get_object_or_404(User, pk=user_id)
         project.members.add(user)
         return Response({'status':'member added'}, status=status.HTTP_200_OK)
-    
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.select_related('project','assignee').all().order_by('-created_at')
@@ -72,3 +72,5 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     queryset = Attachment.objects.select_related('task').all().order_by('-uploaded_at')
     serializer_class = AttachmentSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+

@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     display_name = models.CharField(max_length=120 , blank=True)
-    avatar = models.ImageField(upload_to="avator/" , null=True,blank=True)
+    avatar = models.ImageField(upload_to="avatar/" , null=True,blank=True)
 
     def __str__(self):
         return self.display_name or self.get_username() or self.get_full_name()

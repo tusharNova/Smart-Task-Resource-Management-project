@@ -55,37 +55,16 @@ class SignupSerializer(serializers.ModelSerializer):
         return user
     
 
-class PasswordChnageSerializer(serializers.ModelSerializer):
-    old_password = serializers.CharField(write_only=True, required=True)
-    new_password = serializers.CharField(write_only=True, required=True)
-    new_password2 = serializers.CharField(write_only=True, required=True)
-
-
-    def validate_old_password(self , value):
-        user = self.context['request'].user
-        if not user.check_password(value):
-            raise serializers.ValidationError("Old password is not correct.")
-        return value
-    
+class PasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    new_password2 = serializers.CharField(required=True)
 
     def validate(self, attrs):
-        new_pw = attrs.get("new_password")
-        new_pw2 = attrs.get("new_password2")
-        if new_pw != new_pw2:
-            raise serializers.ValidationError({"new_password": "New passwords do not match."})
-        
-        try:
-            password_validation.validate_password(password=new_pw, user=self.context["request"].user)
-        except DjangoValidationError as e:
-            raise serializers.ValidationError({"new_password": list(e.messages)})
+        if attrs['new_password'] != attrs['new_password2']:
+            raise serializers.ValidationError({"new_password": "New passwords must match."})
+        password_validation.validate_password(attrs['new_password'], self.context['request'].user)
         return attrs
-       
-
-    def save(self, **kwargs):
-        user = self.context["request"].user
-        user.set_password(self.validated_data["new_password"])
-        user.save()
-        return user
 
 
     
